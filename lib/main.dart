@@ -1,8 +1,5 @@
-import 'package:estudos_bloc/bloc/counterBloc.dart';
 import 'package:estudos_bloc/presenter/Counter.dart';
 import 'package:flutter/material.dart';
-
-import 'events/CounterEvent.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,7 +22,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _bloc = CounterBloc();
   final bo = CounterBo();
 
   @override
@@ -35,43 +31,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("Olá BLoC"),
       ),
       body: Center(
-        child: StreamBuilder(
-          stream: _bloc.counter,
-          initialData: 0,
-          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-            return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("estudos bloc, aperte os botoes para testar!"),
-                  Text("${snapshot.data}")
-                ],
-              ),
-            );
-          },
-        ),
+        child: bo.counterPresenter(context),
       ),
       floatingActionButton: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          FloatingActionButton(
-            onPressed: () {
-              _bloc.counterEventSink.add(IncrementEvent());
-            },
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
-          ),
+          bo.botaoMais(context),
           SizedBox(
             width: 10.0,
           ),
-          FloatingActionButton(
-            onPressed: () {
-              _bloc.counterEventSink.add(DecrementEvent());
-            },
-            tooltip: 'Decrement',
-            child: Icon(Icons.remove),
-          ),
+          bo.botaoMenos(context)
         ],
       ),
     );
@@ -80,7 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     super.dispose();
-    // bo.dispose();
-    _bloc.dispose();
+    bo.dispose();
   }
+  
 }
+
+
